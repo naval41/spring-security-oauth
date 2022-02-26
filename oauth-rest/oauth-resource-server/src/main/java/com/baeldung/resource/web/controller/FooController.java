@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,7 @@ public class FooController {
 
     @CrossOrigin(origins = "http://localhost:8089")
     @GetMapping(value = "/{id}")
+    @PostAuthorize("hasAuthority('SCOPE_super')")
     public FooDto findOne(@PathVariable Long id) {
         Foo entity = fooService.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
